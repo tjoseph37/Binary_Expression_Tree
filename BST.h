@@ -7,7 +7,7 @@
 using namespace std;
 
 const int default_threshold_value=1;
-namespace cop4530{
+namespace Binary_Search_Tree{
 
 template<typename T>
 class BST{
