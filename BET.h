@@ -1,5 +1,5 @@
-#ifndef BST_H
-#define BST_H
+#ifndef BET_H
+#define BET_H
 #include<iostream>
 #include<string>
 #include<queue>
@@ -7,19 +7,19 @@
 using namespace std;
 
 const int default_threshold_value=1;
-namespace Binary_Search_Tree{
+namespace Binary_Expression_Tree{
 
 template<typename T>
-class BST{
+class BET{
 public:
- BST(int th=default_threshold_value);
- BST(const string input, int th=default_threshold_value);
- BST(const BST& t);//copy
- BST(BST&& t);//move
- ~BST();
+ BET(int th=default_threshold_value);
+ BET(const string input, int th=default_threshold_value);
+ BET(const BET& t);//copy
+ BET(BET&& t);//move
+ ~BET();
  void buildFromInputString(const string input);//build tree from input string 
- const BST & operator= (const BST & t);
- const BST & operator= (BST && t);
+ const BET & operator= (const BET & t);
+ const BET & operator= (BET && t);
  bool empty();
   
  void printInOrder() const;
@@ -33,26 +33,26 @@ public:
  bool contains(const T& v);
  
  private:
-  struct BSTNode{
+  struct BETNode{
         T element;
         int search=0;
-        BSTNode *left;
-        BSTNode *right;
-        BSTNode(const T& theElement, BSTNode *lt, BSTNode *rt ):
+        BETNode *left;
+        BETNode *right;
+        BETNode(const T& theElement, BETNode *lt, BETNode *rt ):
           element{theElement}, left{lt}, right{rt}{}
-        BSTNode(T&& theElement, BSTNode* lt, BSTNode *rt):
+        BETNode(T&& theElement, BETNode* lt, BETNode *rt):
           element{ std::move(theElement)}, left{lt}, right{rt}{}
   };
-  BSTNode *root;
+  BETNode *root;
   int threshold;
  
-  void printInOrder(BSTNode *t) const
+  void printInOrder(BETNode *t) const
   { if(t != nullptr){
 	printInOrder(t->left);
 	cout << t->element <<" ";
 	printInOrder(t->right);}}
 
-  void printLevelOrder(BSTNode *t) const
+  void printLevelOrder(BETNode *t) const
  { 	queue<BSTNode*> tree;
 	if(t==false) //if node empty, return 
 		return;
@@ -61,7 +61,7 @@ public:
 	tree.push(t);// push node on tree queue
 
 	while(tree.empty() ==false){
-	   BSTNode *n = tree.front();
+	   BETNode *n = tree.front();
            tree.pop();
     	   --currNodes;
 		if(n)
@@ -75,23 +75,23 @@ public:
 	}
     
  }
-  void makeEmpty(BSTNode* &t){
+  void makeEmpty(BETNode* &t){
   if( t != nullptr )
    { makeEmpty( t->left );
      makeEmpty( t->right );
       delete t; }
      t = nullptr; }
 
-  void insert(const T& v, BSTNode *&t){
+  void insert(const T& v, BETNode *&t){
   if(t == nullptr )
-     t = new BSTNode{v, nullptr, nullptr };
+     t = new BETNode{v, nullptr, nullptr };
   else if(v< t->element)
     insert(v,t->left);
    else if(t->element <v)
     insert(v, t->right );
    else; }
   
- void remove(const T& v, BSTNode *&t){
+ void remove(const T& v, BETNode *&t){
   if(t == nullptr )
     return; // Item not found; do nothing
    if(v< t->element)
@@ -102,18 +102,18 @@ public:
    { t->element = findMin( t->right )->element;
      remove( t->element, t->right ); }
    else {
-    BSTNode *oldNode = t;
+    BETNode *oldNode = t;
     t = ( t->left != nullptr ) ? t->left : t->right;
    delete oldNode; }}
 
-   BSTNode * findMin(BSTNode *t ) const
+   BETNode * findMin(BETNode *t ) const
     { if( t == nullptr )
          return nullptr;
       if( t->left == nullptr )
          return t;
       return findMin( t->left ); }
 
-   bool contains(const T& v, BSTNode *&t)
+   bool contains(const T& v, BETNode *&t)
   { if( t==nullptr ) return false;
     else if(v!=root->element)
     {  if(t->left!= nullptr){
@@ -143,7 +143,7 @@ public:
 }
 
   
-  int numOfNodes(BSTNode *t) const{
+  int numOfNodes(BETNode *t) const{
   if(t == nullptr) return 0;
   else if(t->left == nullptr && t->right == nullptr)
     return 1;
@@ -151,7 +151,7 @@ public:
     return numOfNodes(t->left) + numOfNodes(t->right)+1;  }
 
 
-  int height(BSTNode *t) const{
+  int height(BETNode *t) const{
    int r = 0, l= 0;
 	if(t == nullptr)  return -1;
          r= height(t->right);
@@ -162,26 +162,26 @@ public:
           return r+1;	
   }
    
-  BSTNode * clone(BSTNode *t) const{
+  BETNode * clone(BETNode *t) const{
    if( t == nullptr )
    return nullptr;
    else
    return new BSTNode{t->element,clone(t->left),clone(t->right)};}
 
-  void RotateLeft(BSTNode *&t){         
-  BSTNode *temp = t;        
+  void RotateLeft(BETNode *&t){         
+  BETNode *temp = t;        
   t = t->left;        
   temp->left = t->right;         
    t->right = temp;}        
 
    void RotateRight(BSTNode *&t){         
-   BSTNode *temp=t;          
+   BETNode *temp=t;          
    t=t->right;          
    temp->right=t->left;          
    t->left = temp;}    
  
 };
 
-#include "BST.hpp" 
+#include "BET.hpp" 
 }//end of namespace COP4530
 #endif
